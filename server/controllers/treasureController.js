@@ -1,5 +1,5 @@
 module.exports = {
-   dragonTreasure: (req, res) => {
+   dragonTreasure: async (req, res) => {
       const treasure = await req.app.get('db').get_dragon_treasure(1);
       res.status(200).send(treasure);
    },
@@ -7,7 +7,7 @@ module.exports = {
       const treasure = await req.app.get('db').get_user_treasure(req.session.user.id);
       res.status(200).send(treasure);
    },
-   addUsertreasure: async (req, res) => {
+   addUserTreasure: async (req, res) => {
       const {treasureURL} = req.body;
       const {id} = req.session.user;
 

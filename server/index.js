@@ -1,24 +1,30 @@
 require('dotenv').config();
 const express = require('express');
 const massive = require('massive');
+const session = require('express-session')
 const treasureCtrl = require('./controllers/treasureController');
 const auth = require('./middlewares/authMiddleware');
 const app = express();
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env;
+const authCtrl = require('./controllers/authController')
 
-massive(CONNECTION_STRING).then(db => {
+massive({connectionString: CONNECTION_STRING,
+   ssl: {
+      rejectUnauthorized: false}
+   }).then(db => {
    app.set('db', db);
    console.log('Database connected')
-})
+}).catch(err => console.log(err))
 
 app.use(session({
    resave: true,
-   saveUninitialized: false
+   saveUninitialized: false,
+   secret: SESSION_SECRET
 }));
 
 app.post('/auth/register', authCtrl.register);
 app.post('auth/login', authCtrl.login);
-app.get('/auth/logout', authCtrl.logout);
+app.get('/auth/logout', authCtrl.signout);
 
 app.get('/api/treasure/dragon', treasureCtrl.dragonTreasure);
 app.get('/api/treasure/user', auth.usersOnly, treasureCtrl.getUserTreasure);

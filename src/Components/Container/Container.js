@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import './Container.css';
 import Treasure from '../Treasure';
+import { render } from 'react-dom';
 
 export default class Container extends Component {
   constructor() {
@@ -61,8 +62,10 @@ export default class Container extends Component {
     });
   }
 
-  const { username } = props.user;
+  render(){
+  const username  = props.user;
   const { dragon, user, all } = this.state.treasures;
+
   return (
     <div className="Container">
       {dragon ? (
@@ -109,4 +112,5 @@ export default class Container extends Component {
       )}
     </div>
   );
+}
 }
